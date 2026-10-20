@@ -47,3 +47,4 @@ nav button { min-height: 52px; font-size: 13px; padding: 0 4px; }
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
 .progress { height: 12px; background: var(--card); border-radius: 6px; overflow: hidden; border: 1px solid var(--line); }
 .progress div { height: 100%; background: var(--accent); transition: width .2s; }
+.toggle { flex-basis: 100%; display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildTree, calculate, CycleError, fuelNeeded, fuelTotals, gatherList, Item, ItemMap, stationTotals } from './calc';
+import { buildTree, calculate, combineMods, CycleError, fuelNeeded, fuelTotals, gatherList, gatherMinutes, Item, ItemMap, stationTotals } from './calc';
 import data from '../data/items.json';
 
 const mk = (id: string, ing: Record<string, number> = {}, extra: Partial<Item> = {}): Item => ({
@@ -87,5 +87,30 @@ describe('dataset', () => {
       if (it.station && it.station !== 'inventory') expect(all[it.station], it.station).toBeDefined();
     }
     expect(() => calculate(all, (data as Item[]).map((i) => ({ id: i.id, qty: 1 })))).not.toThrow();
+  });
+});
+
+describe('multipliers en bonussen', () => {
+  const m = (time = 0, material = 0, fuel = 0) => ({ time, material, fuel });
+  it('combineert besparingen multiplicatief', () => {
+    expect(combineMods(m(0.2), m(0.1)).time).toBeCloseTo(0.28);
+  });
+  it('crafting-tijd multiplier en thrallbonus', () => {
+    const r = calculate(items, [{ id: 'steel', qty: 2 }]);
+    const t = stationTotals(items, r.crafts, { furnace: m(0.5) }, { craftTime: 0.5, harvest: 1, fuelBurn: 1 });
+    expect(t.furnace.seconds).toBe(15);
+  });
+  it('materiaalbesparing rondt naar boven af op het totaal', () => {
+    const r = calculate(items, [{ id: 'iron', qty: 3 }], {}, { furnace: m(0, 0.25) });
+    expect(r.raw.ore.missing).toBe(5); // 6 × 0.75 = 4.5 → 5
+  });
+  it('brandtijd en brandstofbesparing', () => {
+    const totals = { furnace: { crafts: 10, seconds: 0, unknownTime: 0 } };
+    expect(fuelTotals(totals, { furnace: ['wood'] }, { wood: 1 }, {}, {}, 2)).toEqual({ wood: 5 });
+    expect(fuelTotals(totals, { furnace: ['wood'] }, { wood: 1 }, {}, { furnace: m(0, 0, 0.5) })).toEqual({ wood: 5 });
+  });
+  it('verzameltijd met harvest multiplier', () => {
+    expect(gatherMinutes(120, 60, 2)).toBe(1);
+    expect(gatherMinutes(10, undefined, 1)).toBeNull();
   });
 });

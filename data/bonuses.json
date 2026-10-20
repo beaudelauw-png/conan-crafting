@@ -1,0 +1,12 @@
+{
+  "_uitleg": "Percentages besparing (0-100). time = minder crafting tijd, material = minder ingrediënten, fuel = minder brandstof. Alles ongecontroleerd: pas aan na testen in de game.",
+  "thralls": [
+    { "id": "t1", "label": "Thrall T1", "time": 10, "material": 0, "fuel": 0, "verified": false },
+    { "id": "t2", "label": "Thrall T2", "time": 15, "material": 0, "fuel": 0, "verified": false },
+    { "id": "t3", "label": "Thrall T3", "time": 20, "material": 0, "fuel": 0, "verified": false },
+    { "id": "t4", "label": "Thrall T4", "time": 25, "material": 0, "fuel": 0, "verified": false }
+  ],
+  "upgrades": [
+    { "station": "furnace", "to": "improved_furnace", "time": 25, "material": 0, "fuel": 25, "verified": false }
+  ]
+}

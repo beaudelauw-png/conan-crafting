@@ -1,0 +1,7 @@
+{
+  "_uitleg": "Ruwe schatting: stuks per minuut verzamelen met gangbaar gereedschap, bij harvest x1. Ongecontroleerd.",
+  "rates": {
+    "wood": 60, "stone": 70, "plant_fiber": 40, "bark": 20, "hide": 15, "iron_ore": 40, "coal": 30,
+    "brimstone": 30, "branch": 30, "tar": 15, "aloe_leaves": 10, "crystal": 20, "raw_meat": 10, "feral_flesh": 10
+  }
+}

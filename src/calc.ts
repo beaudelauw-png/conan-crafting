@@ -20,6 +20,19 @@ export interface RawInfo { needed: number; have: number; missing: number }
 export interface Result { raw: Record<string, RawInfo>; crafts: Record<string, CraftInfo> }
 export type Stock = Record<string, number>;
 export interface FuelDef { id: string; craftsPerUnit: number }
+/** Besparing per station als fractie 0..1 */
+export interface Mods { time: number; material: number; fuel: number }
+export type StationMods = Record<string, Mods>;
+export interface Server { craftTime: number; harvest: number; fuelBurn: number }
+export const DEFAULT_SERVER: Server = { craftTime: 1, harvest: 1, fuelBurn: 1 };
+
+/** Besparingen stapelen multiplicatief: 20% en 10% = 28%. */
+export const combineMods = (...ms: Mods[]): Mods => ({
+  time: 1 - ms.reduce((p, m) => p * (1 - m.time), 1),
+  material: 1 - ms.reduce((p, m) => p * (1 - m.material), 1),
+  fuel: 1 - ms.reduce((p, m) => p * (1 - m.fuel), 1),
+});
+const stationOf = (it: Item) => it.station ?? 'inventory';
 
 export class CycleError extends Error {
   constructor(public path: string[]) {
@@ -48,7 +61,7 @@ export function topoOrder(items: ItemMap, roots: string[]): string[] {
   return out.reverse();
 }
 
-export function calculate(items: ItemMap, cart: CartLine[], stock: Stock = {}): Result {
+export function calculate(items: ItemMap, cart: CartLine[], stock: Stock = {}, mods: StationMods = {}): Result {
   const demand: Record<string, number> = {};
   for (const l of cart) if (l.qty > 0) demand[l.id] = (demand[l.id] ?? 0) + l.qty;
   const raw: Record<string, RawInfo> = {};
@@ -62,21 +75,25 @@ export function calculate(items: ItemMap, cart: CartLine[], stock: Stock = {}): 
     if (isRaw(it)) { raw[id] = { needed: gross, have, missing: need }; continue; }
     const n = Math.ceil(need / Math.max(1, it.yield));
     crafts[id] = { crafts: n, needed: gross, have, produced: n * it.yield };
-    for (const ing of it.ingredients) demand[ing.id] = (demand[ing.id] ?? 0) + ing.qty * n;
+    const keep = 1 - (mods[stationOf(it)]?.material ?? 0);
+    for (const ing of it.ingredients) demand[ing.id] = (demand[ing.id] ?? 0) + Math.ceil(ing.qty * n * keep - 1e-9);
   }
   return { raw, crafts };
 }
 
 export interface StationTotal { crafts: number; seconds: number; unknownTime: number }
 
-export function stationTotals(items: ItemMap, crafts: Record<string, CraftInfo>): Record<string, StationTotal> {
+export function stationTotals(
+  items: ItemMap, crafts: Record<string, CraftInfo>, mods: StationMods = {}, server: Server = DEFAULT_SERVER,
+): Record<string, StationTotal> {
   const out: Record<string, StationTotal> = {};
   for (const [id, c] of Object.entries(crafts)) {
     const it = items[id];
-    const st = (out[it.station ?? 'inventory'] ??= { crafts: 0, seconds: 0, unknownTime: 0 });
+    const key = stationOf(it);
+    const st = (out[key] ??= { crafts: 0, seconds: 0, unknownTime: 0 });
     st.crafts += c.crafts;
     if (it.time == null) st.unknownTime++;
-    else st.seconds += it.time * c.crafts;
+    else st.seconds += it.time * c.crafts * server.craftTime * (1 - (mods[key]?.time ?? 0));
   }
   return out;
 }
@@ -89,13 +106,15 @@ export const fuelNeeded = (crafts: number, fuel: FuelDef) =>
 export function fuelTotals(
   totals: Record<string, StationTotal>, stations: Record<string, string[]>,
   ratios: Record<string, number>, choice: Record<string, string>,
+  mods: StationMods = {}, fuelBurn = 1,
 ): Record<string, number> {
   const out: Record<string, number> = {};
   for (const [st, t] of Object.entries(totals)) {
     const opts = stations[st];
     if (!opts || !t.crafts) continue;
     const f = choice[st] ?? opts[0];
-    out[f] = (out[f] ?? 0) + fuelNeeded(t.crafts, { id: f, craftsPerUnit: ratios[f] ?? 1 });
+    const crafts = t.crafts * (1 - (mods[st]?.fuel ?? 0));
+    out[f] = (out[f] ?? 0) + fuelNeeded(crafts, { id: f, craftsPerUnit: (ratios[f] ?? 1) * fuelBurn });
   }
   return out;
 }
@@ -111,6 +130,10 @@ export function gatherList(res: Result, fuel: Record<string, number>, stock: Sto
     return { id, needed, fuel: f, have, missing: needed + f - have };
   }).sort((a, b) => b.missing - a.missing);
 }
+
+/** Ruwe schatting van verzameltijd in minuten; null als er geen tempo bekend is. */
+export const gatherMinutes = (missing: number, perMinute: number | undefined, harvest: number) =>
+  perMinute && harvest > 0 ? missing / (perMinute * harvest) : null;
 
 export interface TreeNode { id: string; qty: number; crafts: number; children: TreeNode[]; cycle?: boolean }
 
