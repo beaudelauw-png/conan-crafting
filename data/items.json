@@ -1,0 +1,1422 @@
+[
+ {
+  "id": "wood",
+  "name": "Wood",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "stone",
+  "name": "Stone",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "plant_fiber",
+  "name": "Plant Fiber",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "bark",
+  "name": "Bark",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "hide",
+  "name": "Hide",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "iron_ore",
+  "name": "Iron Ore",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "coal",
+  "name": "Coal",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "brimstone",
+  "name": "Brimstone",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "branch",
+  "name": "Branch",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "tar",
+  "name": "Tar",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "aloe_leaves",
+  "name": "Aloe Leaves",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "crystal",
+  "name": "Crystal",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "raw_meat",
+  "name": "Savoury Flesh",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "feral_flesh",
+  "name": "Feral Flesh",
+  "category": "resources",
+  "station": null,
+  "ingredients": [],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "iron_bar",
+  "name": "Iron Bar",
+  "category": "intermediates",
+  "station": "furnace",
+  "ingredients": [
+   {
+    "id": "iron_ore",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "tip": "Zet de oven vol en laat hem draaien terwijl je in de buurt blijft: stations craften alleen in geladen gebied.",
+  "verified": false
+ },
+ {
+  "id": "steelfire",
+  "name": "Steelfire",
+  "category": "intermediates",
+  "station": "firebowl_cauldron",
+  "ingredients": [
+   {
+    "id": "tar",
+    "qty": 1
+   },
+   {
+    "id": "brimstone",
+    "qty": 1
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "steel_bar",
+  "name": "Steel Bar",
+  "category": "intermediates",
+  "station": "furnace",
+  "ingredients": [
+   {
+    "id": "iron_bar",
+    "qty": 1
+   },
+   {
+    "id": "steelfire",
+    "qty": 1
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "brick",
+  "name": "Brick",
+  "category": "intermediates",
+  "station": "furnace",
+  "ingredients": [
+   {
+    "id": "stone",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "mortar",
+  "name": "Mortar",
+  "category": "intermediates",
+  "station": "firebowl_cauldron",
+  "ingredients": [
+   {
+    "id": "stone",
+    "qty": 2
+   },
+   {
+    "id": "bark",
+    "qty": 1
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "hardened_brick",
+  "name": "Hardened Brick",
+  "category": "intermediates",
+  "station": "furnace",
+  "ingredients": [
+   {
+    "id": "brick",
+    "qty": 4
+   },
+   {
+    "id": "mortar",
+    "qty": 1
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "shaped_wood",
+  "name": "Shaped Wood",
+  "category": "intermediates",
+  "station": "carpenters_bench",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "leather",
+  "name": "Leather",
+  "category": "intermediates",
+  "station": "tannery",
+  "ingredients": [
+   {
+    "id": "hide",
+    "qty": 3
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "twine",
+  "name": "Twine",
+  "category": "intermediates",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "plant_fiber",
+    "qty": 3
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "iron_reinforcement",
+  "name": "Iron Reinforcement",
+  "category": "intermediates",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "iron_bar",
+    "qty": 1
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "steel_reinforcement",
+  "name": "Steel Reinforcement",
+  "category": "intermediates",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "steel_bar",
+    "qty": 1
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "sandstone_foundation",
+  "name": "Sandstone Foundation",
+  "category": "building",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "stone",
+    "qty": 15
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "sandstone_wall",
+  "name": "Sandstone Wall",
+  "category": "building",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "stone",
+    "qty": 10
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "sandstone_ceiling",
+  "name": "Sandstone Ceiling",
+  "category": "building",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "stone",
+    "qty": 10
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "sandstone_doorframe",
+  "name": "Sandstone Doorframe",
+  "category": "building",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "stone",
+    "qty": 10
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "wooden_door",
+  "name": "Wooden Door",
+  "category": "building",
+  "station": "carpenters_bench",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 10
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "stonebrick_foundation",
+  "name": "Stonebrick Foundation",
+  "category": "building",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "brick",
+    "qty": 10
+   },
+   {
+    "id": "shaped_wood",
+    "qty": 4
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "stonebrick_wall",
+  "name": "Stonebrick Wall",
+  "category": "building",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "brick",
+    "qty": 6
+   },
+   {
+    "id": "shaped_wood",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "stonebrick_ceiling",
+  "name": "Stonebrick Ceiling",
+  "category": "building",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "brick",
+    "qty": 6
+   },
+   {
+    "id": "shaped_wood",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "stonebrick_doorframe",
+  "name": "Stonebrick Doorframe",
+  "category": "building",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "brick",
+    "qty": 6
+   },
+   {
+    "id": "shaped_wood",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "reinforced_wooden_door",
+  "name": "Reinforced Wooden Door",
+  "category": "building",
+  "station": "carpenters_bench",
+  "ingredients": [
+   {
+    "id": "shaped_wood",
+    "qty": 10
+   },
+   {
+    "id": "iron_reinforcement",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "hardened_foundation",
+  "name": "Hardened Brick Foundation",
+  "category": "building",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "hardened_brick",
+    "qty": 10
+   },
+   {
+    "id": "steel_reinforcement",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "hardened_wall",
+  "name": "Hardened Brick Wall",
+  "category": "building",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "hardened_brick",
+    "qty": 6
+   },
+   {
+    "id": "steel_reinforcement",
+    "qty": 1
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "hardened_ceiling",
+  "name": "Hardened Brick Ceiling",
+  "category": "building",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "hardened_brick",
+    "qty": 6
+   },
+   {
+    "id": "steel_reinforcement",
+    "qty": 1
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "hardened_doorframe",
+  "name": "Hardened Brick Doorframe",
+  "category": "building",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "hardened_brick",
+    "qty": 6
+   },
+   {
+    "id": "steel_reinforcement",
+    "qty": 1
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "vault_door",
+  "name": "Vault Door",
+  "category": "building",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "steel_bar",
+    "qty": 20
+   },
+   {
+    "id": "steel_reinforcement",
+    "qty": 5
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "campfire",
+  "name": "Campfire",
+  "category": "stations",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 10
+   },
+   {
+    "id": "stone",
+    "qty": 5
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "bedroll",
+  "name": "Bedroll",
+  "category": "stations",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "plant_fiber",
+    "qty": 10
+   },
+   {
+    "id": "hide",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "furnace",
+  "name": "Furnace",
+  "category": "stations",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "stone",
+    "qty": 50
+   },
+   {
+    "id": "wood",
+    "qty": 10
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "carpenters_bench",
+  "name": "Carpenter's Bench",
+  "category": "stations",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 40
+   },
+   {
+    "id": "stone",
+    "qty": 10
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "blacksmiths_bench",
+  "name": "Blacksmith's Bench",
+  "category": "stations",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 25
+   },
+   {
+    "id": "stone",
+    "qty": 50
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "armorers_bench",
+  "name": "Armorer's Bench",
+  "category": "stations",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 30
+   },
+   {
+    "id": "hide",
+    "qty": 10
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "tannery",
+  "name": "Tannery",
+  "category": "stations",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 25
+   },
+   {
+    "id": "stone",
+    "qty": 15
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "firebowl_cauldron",
+  "name": "Firebowl Cauldron",
+  "category": "stations",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "iron_bar",
+    "qty": 10
+   },
+   {
+    "id": "stone",
+    "qty": 20
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "stove",
+  "name": "Stove",
+  "category": "stations",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "brick",
+    "qty": 10
+   },
+   {
+    "id": "iron_bar",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "improved_furnace",
+  "name": "Improved Furnace",
+  "category": "stations",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "steel_bar",
+    "qty": 10
+   },
+   {
+    "id": "hardened_brick",
+    "qty": 20
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "stone_hatchet",
+  "name": "Stone Hatchet",
+  "category": "tools",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 10
+   },
+   {
+    "id": "stone",
+    "qty": 5
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "stone_pick",
+  "name": "Stone Pick",
+  "category": "tools",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 10
+   },
+   {
+    "id": "stone",
+    "qty": 5
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "stone_sickle",
+  "name": "Stone Sickle",
+  "category": "tools",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 10
+   },
+   {
+    "id": "stone",
+    "qty": 5
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "iron_hatchet",
+  "name": "Iron Hatchet",
+  "category": "tools",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "iron_bar",
+    "qty": 8
+   },
+   {
+    "id": "shaped_wood",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "iron_pick",
+  "name": "Iron Pick",
+  "category": "tools",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "iron_bar",
+    "qty": 8
+   },
+   {
+    "id": "shaped_wood",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "steel_pick",
+  "name": "Steel Pick",
+  "category": "tools",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "steel_bar",
+    "qty": 8
+   },
+   {
+    "id": "shaped_wood",
+    "qty": 2
+   },
+   {
+    "id": "leather",
+    "qty": 1
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "steel_hatchet",
+  "name": "Steel Hatchet",
+  "category": "tools",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "steel_bar",
+    "qty": 8
+   },
+   {
+    "id": "shaped_wood",
+    "qty": 2
+   },
+   {
+    "id": "leather",
+    "qty": 1
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "torch",
+  "name": "Torch",
+  "category": "tools",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 2
+   },
+   {
+    "id": "plant_fiber",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "stone_spear",
+  "name": "Stone Spear",
+  "category": "weapons",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 8
+   },
+   {
+    "id": "stone",
+    "qty": 5
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "hunting_bow",
+  "name": "Hunting Bow",
+  "category": "weapons",
+  "station": "carpenters_bench",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 10
+   },
+   {
+    "id": "twine",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "stone_arrow",
+  "name": "Stone Arrow",
+  "category": "weapons",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 1
+   },
+   {
+    "id": "stone",
+    "qty": 1
+   }
+  ],
+  "yield": 5,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "iron_arrow",
+  "name": "Iron Arrow",
+  "category": "weapons",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "iron_bar",
+    "qty": 1
+   },
+   {
+    "id": "wood",
+    "qty": 1
+   }
+  ],
+  "yield": 5,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "iron_sword",
+  "name": "Iron Sword",
+  "category": "weapons",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "iron_bar",
+    "qty": 10
+   },
+   {
+    "id": "leather",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "steel_sword",
+  "name": "Steel Sword",
+  "category": "weapons",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "steel_bar",
+    "qty": 10
+   },
+   {
+    "id": "leather",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "iron_shield",
+  "name": "Iron Shield",
+  "category": "weapons",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "iron_bar",
+    "qty": 12
+   },
+   {
+    "id": "shaped_wood",
+    "qty": 4
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "light_hide_chest",
+  "name": "Hide Chest",
+  "category": "armor",
+  "station": "armorers_bench",
+  "ingredients": [
+   {
+    "id": "hide",
+    "qty": 10
+   },
+   {
+    "id": "twine",
+    "qty": 3
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "light_hide_legs",
+  "name": "Hide Leggings",
+  "category": "armor",
+  "station": "armorers_bench",
+  "ingredients": [
+   {
+    "id": "hide",
+    "qty": 8
+   },
+   {
+    "id": "twine",
+    "qty": 2
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "medium_leather_chest",
+  "name": "Leather Chest",
+  "category": "armor",
+  "station": "armorers_bench",
+  "ingredients": [
+   {
+    "id": "leather",
+    "qty": 10
+   },
+   {
+    "id": "twine",
+    "qty": 4
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "heavy_iron_chest",
+  "name": "Iron Chestplate",
+  "category": "armor",
+  "station": "armorers_bench",
+  "ingredients": [
+   {
+    "id": "iron_bar",
+    "qty": 15
+   },
+   {
+    "id": "leather",
+    "qty": 5
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "bandage",
+  "name": "Bandage",
+  "category": "consumables",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "plant_fiber",
+    "qty": 5
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "aloe_potion",
+  "name": "Aloe Potion",
+  "category": "consumables",
+  "station": "firebowl_cauldron",
+  "ingredients": [
+   {
+    "id": "aloe_leaves",
+    "qty": 4
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "cooked_meat",
+  "name": "Cooked Savoury Flesh",
+  "category": "consumables",
+  "station": "campfire",
+  "ingredients": [
+   {
+    "id": "raw_meat",
+    "qty": 1
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "truncheon",
+  "name": "Truncheon",
+  "category": "thralls",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "wood",
+    "qty": 5
+   },
+   {
+    "id": "plant_fiber",
+    "qty": 3
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "binding_rope",
+  "name": "Binding Rope",
+  "category": "thralls",
+  "station": "inventory",
+  "ingredients": [
+   {
+    "id": "twine",
+    "qty": 3
+   },
+   {
+    "id": "plant_fiber",
+    "qty": 5
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ },
+ {
+  "id": "gruel",
+  "name": "Gruel",
+  "category": "thralls",
+  "station": "campfire",
+  "ingredients": [
+   {
+    "id": "feral_flesh",
+    "qty": 3
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "tip": "Thrallvoedsel; werkt alleen in de Wheel of Pain.",
+  "verified": false
+ },
+ {
+  "id": "wheel_of_pain",
+  "name": "Wheel of Pain",
+  "category": "thralls",
+  "station": "blacksmiths_bench",
+  "ingredients": [
+   {
+    "id": "iron_bar",
+    "qty": 30
+   },
+   {
+    "id": "shaped_wood",
+    "qty": 20
+   },
+   {
+    "id": "stone",
+    "qty": 50
+   }
+  ],
+  "yield": 1,
+  "time": null,
+  "level": null,
+  "feat": null,
+  "verified": false
+ }
+]

@@ -1,0 +1,17 @@
+{
+  "_uitleg": "craftsPerUnit = hoeveel crafts één eenheid brandstof oplevert. Standaardwaarden zijn ongecontroleerd, pas aan in de app of hier.",
+  "fuels": [
+    { "id": "wood", "craftsPerUnit": 1, "verified": false },
+    { "id": "branch", "craftsPerUnit": 0.5, "verified": false },
+    { "id": "coal", "craftsPerUnit": 3, "verified": false },
+    { "id": "bark", "craftsPerUnit": 1, "verified": false }
+  ],
+  "stations": {
+    "furnace": ["wood", "branch", "coal"],
+    "improved_furnace": ["wood", "branch", "coal"],
+    "campfire": ["wood", "branch", "coal"],
+    "stove": ["wood", "branch", "coal"],
+    "firebowl_cauldron": ["wood", "branch", "coal"],
+    "tannery": ["bark"]
+  }
+}
