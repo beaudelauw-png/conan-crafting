@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildTree, calculate, CycleError, fuelNeeded, Item, ItemMap, stationTotals } from './calc';
+import { buildTree, calculate, CycleError, fuelNeeded, fuelTotals, gatherList, Item, ItemMap, stationTotals } from './calc';
 import data from '../data/items.json';
 
 const mk = (id: string, ing: Record<string, number> = {}, extra: Partial<Item> = {}): Item => ({
@@ -19,14 +19,15 @@ const items = map(
 describe('calculate', () => {
   it('rekent recursief terug tot ruwe grondstoffen', () => {
     const r = calculate(items, [{ id: 'steel', qty: 3 }]);
-    expect(r.raw).toEqual({ ore: 6, tar: 3 });
+    expect(r.raw.ore.missing).toBe(6);
+    expect(r.raw.tar.missing).toBe(3);
     expect(r.crafts.iron.crafts).toBe(3);
   });
 
   it('rondt af naar hele crafts', () => {
     const r = calculate(items, [{ id: 'arrow', qty: 7 }]);
-    expect(r.crafts.arrow).toEqual({ crafts: 2, needed: 7, produced: 10 });
-    expect(r.raw.ore).toBe(4);
+    expect(r.crafts.arrow).toEqual({ crafts: 2, needed: 7, have: 0, produced: 10 });
+    expect(r.raw.ore.missing).toBe(4);
   });
 
   it('telt vraag eerst op voor het afronden', () => {
@@ -42,6 +43,28 @@ describe('calculate', () => {
     const loop = map(mk('a', { b: 1 }), mk('b', { a: 1 }));
     expect(() => calculate(loop, [{ id: 'a', qty: 1 }])).toThrow(CycleError);
     expect(buildTree(loop, 'a', 1).children[0].children[0].cycle).toBe(true);
+  });
+});
+
+describe('voorraad', () => {
+  it('trekt ruwe voorraad af', () => {
+    const r = calculate(items, [{ id: 'steel', qty: 3 }], { ore: 4, tar: 10 });
+    expect(r.raw.ore).toEqual({ needed: 6, have: 4, missing: 2 });
+    expect(r.raw.tar).toEqual({ needed: 3, have: 3, missing: 0 });
+  });
+  it('voorraad tussenproduct vermindert crafts en ingrediënten', () => {
+    const r = calculate(items, [{ id: 'steel', qty: 3 }], { iron: 2 });
+    expect(r.crafts.iron).toMatchObject({ crafts: 1, have: 2 });
+    expect(r.raw.ore.missing).toBe(2);
+  });
+  it('voorraad wordt afgetrokken vóór afronden', () => {
+    expect(calculate(items, [{ id: 'arrow', qty: 7 }], { arrow: 3 }).crafts.arrow.crafts).toBe(1);
+  });
+  it('verzamellijst telt brandstof mee', () => {
+    const r = calculate(items, [{ id: 'steel', qty: 2 }]);
+    const fuel = fuelTotals(stationTotals(items, r.crafts), { furnace: ['ore'] }, { ore: 2 }, {});
+    expect(fuel).toEqual({ ore: 2 });
+    expect(gatherList(r, fuel, { ore: 1 }).find((g) => g.id === 'ore')).toEqual({ id: 'ore', needed: 4, fuel: 2, have: 1, missing: 5 });
   });
 });
 

@@ -14,8 +14,11 @@ export interface Item {
 }
 export type ItemMap = Record<string, Item>;
 export interface CartLine { id: string; qty: number }
-export interface CraftInfo { crafts: number; needed: number; produced: number }
-export interface Result { raw: Record<string, number>; crafts: Record<string, CraftInfo> }
+/** needed = totale vraag, have = uit voorraad gebruikt */
+export interface CraftInfo { crafts: number; needed: number; have: number; produced: number }
+export interface RawInfo { needed: number; have: number; missing: number }
+export interface Result { raw: Record<string, RawInfo>; crafts: Record<string, CraftInfo> }
+export type Stock = Record<string, number>;
 export interface FuelDef { id: string; craftsPerUnit: number }
 
 export class CycleError extends Error {
@@ -45,18 +48,20 @@ export function topoOrder(items: ItemMap, roots: string[]): string[] {
   return out.reverse();
 }
 
-export function calculate(items: ItemMap, cart: CartLine[]): Result {
+export function calculate(items: ItemMap, cart: CartLine[], stock: Stock = {}): Result {
   const demand: Record<string, number> = {};
   for (const l of cart) if (l.qty > 0) demand[l.id] = (demand[l.id] ?? 0) + l.qty;
-  const raw: Record<string, number> = {};
+  const raw: Record<string, RawInfo> = {};
   const crafts: Record<string, CraftInfo> = {};
   for (const id of topoOrder(items, Object.keys(demand))) {
-    const need = demand[id] ?? 0;
-    if (!need) continue;
+    const gross = demand[id] ?? 0;
+    if (!gross) continue;
+    const have = Math.min(Math.max(0, stock[id] ?? 0), gross);
+    const need = gross - have;
     const it = items[id];
-    if (isRaw(it)) { raw[id] = need; continue; }
+    if (isRaw(it)) { raw[id] = { needed: gross, have, missing: need }; continue; }
     const n = Math.ceil(need / Math.max(1, it.yield));
-    crafts[id] = { crafts: n, needed: need, produced: n * it.yield };
+    crafts[id] = { crafts: n, needed: gross, have, produced: n * it.yield };
     for (const ing of it.ingredients) demand[ing.id] = (demand[ing.id] ?? 0) + ing.qty * n;
   }
   return { raw, crafts };
@@ -79,6 +84,33 @@ export function stationTotals(items: ItemMap, crafts: Record<string, CraftInfo>)
 /** Aantal brandstofeenheden voor een aantal crafts, naar boven afgerond. */
 export const fuelNeeded = (crafts: number, fuel: FuelDef) =>
   fuel.craftsPerUnit > 0 ? Math.ceil(crafts / fuel.craftsPerUnit) : 0;
+
+/** Brandstof per brandstof-item, op basis van het aantal crafts per station. */
+export function fuelTotals(
+  totals: Record<string, StationTotal>, stations: Record<string, string[]>,
+  ratios: Record<string, number>, choice: Record<string, string>,
+): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const [st, t] of Object.entries(totals)) {
+    const opts = stations[st];
+    if (!opts || !t.crafts) continue;
+    const f = choice[st] ?? opts[0];
+    out[f] = (out[f] ?? 0) + fuelNeeded(t.crafts, { id: f, craftsPerUnit: ratios[f] ?? 1 });
+  }
+  return out;
+}
+
+export interface GatherRow { id: string; needed: number; fuel: number; have: number; missing: number }
+
+/** Wat er verzameld moet worden: ruwe grondstoffen + brandstof, min voorraad. */
+export function gatherList(res: Result, fuel: Record<string, number>, stock: Stock): GatherRow[] {
+  const ids = new Set([...Object.keys(res.raw), ...Object.keys(fuel)]);
+  return [...ids].map((id) => {
+    const needed = res.raw[id]?.needed ?? 0, f = fuel[id] ?? 0;
+    const have = Math.min(Math.max(0, stock[id] ?? 0), needed + f);
+    return { id, needed, fuel: f, have, missing: needed + f - have };
+  }).sort((a, b) => b.missing - a.missing);
+}
 
 export interface TreeNode { id: string; qty: number; crafts: number; children: TreeNode[]; cycle?: boolean }
 

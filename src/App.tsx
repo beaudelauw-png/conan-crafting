@@ -2,11 +2,15 @@ import { useEffect, useMemo, useState } from 'react';
 import itemData from '../data/items.json';
 import fuelData from '../data/fuel.json';
 import {
-  buildTree, calculate, CartLine, formatTime, fuelNeeded, Item, ItemMap, Result, stationTotals, TreeNode,
+  buildTree, calculate, CartLine, formatTime, fuelTotals, gatherList, GatherRow, Item, ItemMap, Result,
+  stationTotals, StationTotal, Stock, TreeNode,
 } from './calc';
+import { decodeShare, encodeShare, shareText } from './share';
 
 const ITEMS = itemData as Item[];
 const MAP: ItemMap = Object.fromEntries(ITEMS.map((i) => [i.id, i]));
+const FUEL_STATIONS = fuelData.stations as Record<string, string[]>;
+const DEFAULT_RATIOS = Object.fromEntries(fuelData.fuels.map((f) => [f.id, f.craftsPerUnit]));
 const CATS: Record<string, string> = {
   building: 'Bouwen', stations: 'Stations', tools: 'Gereedschap', weapons: 'Wapens', armor: 'Armor',
   consumables: 'Consumables', thralls: 'Thralls/Pets', intermediates: 'Tussenproducten', resources: 'Grondstoffen',
@@ -22,6 +26,10 @@ function useStored<T>(key: string, init: T): [T, (v: T) => void] {
   return [v, setV];
 }
 
+async function copy(text: string) {
+  try { await navigator.clipboard.writeText(text); alert('Gekopieerd!'); } catch { prompt('Kopieer deze tekst:', text); }
+}
+
 const Unverified = ({ it }: { it?: Item }) =>
   it && !it.verified ? <span className="warn" title="Niet geverifieerd in de game">⚠</span> : null;
 
@@ -29,42 +37,84 @@ function Qty({ value, onChange }: { value: number; onChange: (n: number) => void
   return (
     <div className="qty">
       <button onClick={() => onChange(Math.max(0, value - 1))}>−</button>
-      <input type="number" inputMode="numeric" min={0} value={value}
-        onChange={(e) => onChange(Math.max(0, Math.floor(Number(e.target.value) || 0)))} />
+      <NumInput value={value} onChange={onChange} />
       <button onClick={() => onChange(value + 1)}>+</button>
     </div>
   );
 }
 
-type Tab = 'zoeken' | 'lijst' | 'resultaat' | 'brandstof';
+const NumInput = ({ value, onChange }: { value: number; onChange: (n: number) => void }) => (
+  <input className="num" type="number" inputMode="numeric" min={0} value={value || ''} placeholder="0"
+    onChange={(e) => onChange(Math.max(0, Math.floor(Number(e.target.value) || 0)))} />
+);
+
+type Tab = 'zoeken' | 'lijst' | 'resultaat' | 'instellingen';
+type Calc = { res: Result; totals: Record<string, StationTotal>; rows: GatherRow[] } | { error: string };
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('zoeken');
   const [cart, setCart] = useStored<CartLine[]>('cart', []);
-  const [ratios, setRatios] = useStored<Record<string, number>>('fuelRatios',
-    Object.fromEntries(fuelData.fuels.map((f) => [f.id, f.craftsPerUnit])));
+  const [stock, setStock] = useStored<Stock>('stock', {});
+  const [checked, setChecked] = useStored<Record<string, boolean>>('checked', {});
+  const [assign, setAssign] = useStored<Record<string, string>>('assign', {});
+  const [players, setPlayers] = useStored<string[]>('players', ['Speler 1', 'Speler 2', 'Speler 3', 'Speler 4']);
+  const [ratios, setRatios] = useStored<Record<string, number>>('fuelRatios', DEFAULT_RATIOS);
   const [stationFuel, setStationFuel] = useStored<Record<string, string>>('stationFuel', {});
 
+  // Gedeelde lijst uit de link laden
+  useEffect(() => {
+    const s = decodeShare(location.hash);
+    if (!s) return;
+    history.replaceState(null, '', location.pathname + location.search);
+    if (!confirm('Gedeelde bouwlijst laden? Je huidige lijst wordt vervangen.')) return;
+    setCart(s.cart.filter((l) => MAP[l.id]));
+    setStock(s.stock); setAssign(s.assign); setChecked({});
+    if (s.players.length) setPlayers(s.players);
+    setTab('resultaat');
+  }, []);
+
+  const calc = useMemo<Calc>(() => {
+    try {
+      const res = calculate(MAP, cart.filter((l) => MAP[l.id]), stock);
+      const totals = stationTotals(MAP, res.crafts);
+      return { res, totals, rows: gatherList(res, fuelTotals(totals, FUEL_STATIONS, ratios, stationFuel), stock) };
+    } catch (e) { return { error: (e as Error).message }; }
+  }, [cart, stock, ratios, stationFuel]);
+
   const setQty = (id: string, qty: number) =>
-    setCart(cart.some((l) => l.id === id)
-      ? cart.map((l) => (l.id === id ? { ...l, qty } : l))
-      : [...cart, { id, qty }]);
+    setCart(cart.some((l) => l.id === id) ? cart.map((l) => (l.id === id ? { ...l, qty } : l)) : [...cart, { id, qty }]);
+  const setHave = (id: string, n: number) => setStock({ ...stock, [id]: n });
   const count = cart.reduce((s, l) => s + l.qty, 0);
+
+  const shareLink = () => {
+    const url = location.href.split('#')[0] + encodeShare({ cart, stock, assign, players });
+    if (navigator.share) navigator.share({ title: 'Conan bouwlijst', url }).catch(() => {});
+    else copy(url);
+  };
+  const shareTxt = () => 'rows' in calc && copy(shareText(cart, calc.rows, assign, players, name));
 
   return (
     <div className="app">
       <main>
         {tab === 'zoeken' && <Search cart={cart} setQty={setQty} />}
-        {tab === 'lijst' && <Cart cart={cart} setCart={setCart} setQty={setQty} />}
-        {tab === 'resultaat' && <Results cart={cart} ratios={ratios} stationFuel={stationFuel} />}
-        {tab === 'brandstof' && (
-          <FuelSettings ratios={ratios} setRatios={setRatios} stationFuel={stationFuel} setStationFuel={setStationFuel} />
+        {tab === 'lijst' && (
+          <Cart cart={cart} setCart={setCart} setQty={setQty} onLink={shareLink} onText={shareTxt} />
+        )}
+        {tab === 'resultaat' && (
+          'error' in calc ? <p className="error">{calc.error}</p>
+            : !count ? <p className="empty">Nog niets om te berekenen.</p>
+              : <Results calc={calc} cart={cart} stock={stock} setHave={setHave}
+                checked={checked} setChecked={setChecked} assign={assign} setAssign={setAssign} players={players} />
+        )}
+        {tab === 'instellingen' && (
+          <Settings players={players} setPlayers={setPlayers} ratios={ratios} setRatios={setRatios}
+            stationFuel={stationFuel} setStationFuel={setStationFuel} />
         )}
       </main>
       <nav>
-        {(['zoeken', 'lijst', 'resultaat', 'brandstof'] as Tab[]).map((t) => (
+        {(['zoeken', 'lijst', 'resultaat', 'instellingen'] as Tab[]).map((t) => (
           <button key={t} className={tab === t ? 'on' : ''} onClick={() => setTab(t)}>
-            {{ zoeken: '🔍 Zoeken', lijst: `📋 Lijst${count ? ` (${count})` : ''}`, resultaat: '⚒ Resultaat', brandstof: '🔥 Brandstof' }[t]}
+            {{ zoeken: '🔍 Zoeken', lijst: `📋 Lijst${count ? ` (${count})` : ''}`, resultaat: '⚒ Resultaat', instellingen: '⚙ Instellingen' }[t]}
           </button>
         ))}
       </nav>
@@ -104,7 +154,10 @@ function Search({ cart, setQty }: { cart: CartLine[]; setQty: (id: string, n: nu
   );
 }
 
-function Cart({ cart, setCart, setQty }: { cart: CartLine[]; setCart: (c: CartLine[]) => void; setQty: (id: string, n: number) => void }) {
+function Cart({ cart, setCart, setQty, onLink, onText }: {
+  cart: CartLine[]; setCart: (c: CartLine[]) => void; setQty: (id: string, n: number) => void;
+  onLink: () => void; onText: () => void;
+}) {
   if (!cart.length) return <p className="empty">Bouwlijst is leeg. Voeg items toe via Zoeken.</p>;
   return (
     <>
@@ -117,27 +170,24 @@ function Cart({ cart, setCart, setQty }: { cart: CartLine[]; setCart: (c: CartLi
           </li>
         ))}
       </ul>
+      <div className="two">
+        <button onClick={onLink}>🔗 Deel als link</button>
+        <button onClick={onText}>💬 Kopieer als tekst</button>
+      </div>
       <button className="wide" onClick={() => confirm('Bouwlijst leegmaken?') && setCart([])}>Lijst leegmaken</button>
     </>
   );
 }
 
-function Results({ cart, ratios, stationFuel }: { cart: CartLine[]; ratios: Record<string, number>; stationFuel: Record<string, string> }) {
+function Results({ calc, cart, stock, setHave, checked, setChecked, assign, setAssign, players }: {
+  calc: Exclude<Calc, { error: string }>; cart: CartLine[]; stock: Stock; setHave: (id: string, n: number) => void;
+  checked: Record<string, boolean>; setChecked: (c: Record<string, boolean>) => void;
+  assign: Record<string, string>; setAssign: (a: Record<string, string>) => void; players: string[];
+}) {
   const [view, setView] = useState<'raw' | 'craft' | 'tree'>('raw');
-  const res = useMemo<Result | string>(() => {
-    try { return calculate(MAP, cart.filter((l) => MAP[l.id])); } catch (e) { return (e as Error).message; }
-  }, [cart]);
-  if (typeof res === 'string') return <p className="error">{res}</p>;
-  if (!cart.some((l) => l.qty > 0)) return <p className="empty">Nog niets om te berekenen.</p>;
-
-  const totals = stationTotals(MAP, res.crafts);
-  const fuel: Record<string, number> = {};
-  for (const [st, t] of Object.entries(totals)) {
-    const opts = (fuelData.stations as Record<string, string[]>)[st];
-    if (!opts) continue;
-    const f = stationFuel[st] ?? opts[0];
-    fuel[f] = (fuel[f] ?? 0) + fuelNeeded(t.crafts, { id: f, craftsPerUnit: ratios[f] ?? 1 });
-  }
+  const { res, totals, rows } = calc;
+  const todo = rows.filter((r) => r.missing > 0);
+  const done = todo.filter((r) => checked[r.id]).length;
   const anyUnverified = [...Object.keys(res.crafts), ...Object.keys(res.raw)].some((id) => !MAP[id].verified);
 
   return (
@@ -151,39 +201,49 @@ function Results({ cart, ratios, stationFuel }: { cart: CartLine[]; ratios: Reco
 
       {view === 'raw' && (
         <>
-          <h3>Ruwe grondstoffen</h3>
+          <div className="progress"><div style={{ width: `${todo.length ? (done / todo.length) * 100 : 100}%` }} /></div>
+          <p className="note">{todo.length ? `${done} van ${todo.length} verzameld` : 'Alles is binnen! ✅'}</p>
           <ul className="rows">
-            {Object.entries(res.raw).sort((a, b) => b[1] - a[1]).map(([id, n]) => (
-              <li key={id}><div className="grow">{name(id)}</div><b>{n}</b></li>
+            {rows.map((r) => (
+              <li key={r.id} className={`wrap ${r.missing === 0 || checked[r.id] ? 'done' : ''}`}>
+                <input type="checkbox" className="check" checked={!!checked[r.id]} disabled={r.missing === 0}
+                  onChange={(e) => setChecked({ ...checked, [r.id]: e.target.checked })} />
+                <div className="grow">
+                  <b>{name(r.id)}</b>
+                  <small>nodig {r.needed + r.fuel}{r.fuel ? ` (waarvan ${r.fuel} brandstof)` : ''}</small>
+                </div>
+                <label className="have">kist<NumInput value={stock[r.id] ?? 0} onChange={(n) => setHave(r.id, n)} /></label>
+                <b className="big">{r.missing}</b>
+                {players.length > 0 && r.missing > 0 && (
+                  <select className="player" value={assign[r.id] ?? ''} onChange={(e) => setAssign({ ...assign, [r.id]: e.target.value })}>
+                    <option value="">— niemand —</option>
+                    {players.map((p) => <option key={p} value={p}>{p}</option>)}
+                  </select>
+                )}
+              </li>
             ))}
           </ul>
-          {Object.keys(fuel).length > 0 && (
-            <>
-              <h3>Brandstof (extra)</h3>
-              <ul className="rows">
-                {Object.entries(fuel).map(([id, n]) => (
-                  <li key={id}><div className="grow">{name(id)}</div><b>{n}</b></li>
-                ))}
-              </ul>
-            </>
-          )}
+          {done > 0 && <button className="wide" onClick={() => setChecked({})}>Vinkjes wissen</button>}
         </>
       )}
 
       {view === 'craft' && Object.entries(totals).map(([st, t]) => (
         <section key={st}>
-          <h3>{stationName(st)} <small>· {t.crafts} crafts · {t.seconds ? formatTime(t.seconds) : ''}{t.unknownTime ? ` (${t.unknownTime} recept(en) zonder tijd)` : ''}</small></h3>
+          <h3>{stationName(st)} <small>· {t.crafts} crafts{t.seconds ? ` · ${formatTime(t.seconds)}` : ''}{t.unknownTime ? ` (${t.unknownTime} recept(en) zonder tijd)` : ''}</small></h3>
           <ul className="rows">
-            {Object.entries(res.crafts).filter(([id]) => (MAP[id].station ?? 'inventory') === st).map(([id, c]) => (
-              <li key={id}>
-                <div className="grow">
-                  <b>{name(id)}</b> <Unverified it={MAP[id]} />
-                  <small>{c.crafts}× craften → {c.produced} stuks{c.produced > c.needed ? ` (${c.produced - c.needed} over)` : ''}</small>
-                  {MAP[id].tip && <small className="tip">💡 {MAP[id].tip}</small>}
-                </div>
-                <b>{c.needed}</b>
-              </li>
-            ))}
+            {Object.entries(res.crafts).filter(([id]) => (MAP[id].station ?? 'inventory') === st).map(([id, c]) => {
+              const over = c.produced - (c.needed - c.have);
+              return (
+                <li key={id}>
+                  <div className="grow">
+                    <b>{name(id)}</b> <Unverified it={MAP[id]} />
+                    <small>nodig {c.needed}{c.have ? `, ${c.have} uit kist` : ''} → {c.crafts}× craften{over ? ` (${over} over)` : ''}</small>
+                    {MAP[id].tip && <small className="tip">💡 {MAP[id].tip}</small>}
+                  </div>
+                  <label className="have">kist<NumInput value={stock[id] ?? 0} onChange={(n) => setHave(id, n)} /></label>
+                </li>
+              );
+            })}
           </ul>
         </section>
       ))}
@@ -209,12 +269,24 @@ function Tree({ node }: { node: TreeNode }) {
   );
 }
 
-function FuelSettings({ ratios, setRatios, stationFuel, setStationFuel }: {
+function Settings({ players, setPlayers, ratios, setRatios, stationFuel, setStationFuel }: {
+  players: string[]; setPlayers: (p: string[]) => void;
   ratios: Record<string, number>; setRatios: (r: Record<string, number>) => void;
   stationFuel: Record<string, string>; setStationFuel: (s: Record<string, string>) => void;
 }) {
   return (
     <>
+      <h3>Spelers</h3>
+      <ul className="rows">
+        {players.map((p, i) => (
+          <li key={i}>
+            <input className="grow text" value={p} onChange={(e) => setPlayers(players.map((x, j) => (j === i ? e.target.value : x)))} />
+            <button className="del" onClick={() => setPlayers(players.filter((_, j) => j !== i))}>✕</button>
+          </li>
+        ))}
+      </ul>
+      <button className="wide" onClick={() => setPlayers([...players, `Speler ${players.length + 1}`])}>+ Speler</button>
+
       <h3>Verhouding per brandstof</h3>
       <p className="note">Aantal crafts per 1 eenheid brandstof. ⚠ Standaardwaarden zijn niet geverifieerd.</p>
       <ul className="rows">
@@ -228,7 +300,7 @@ function FuelSettings({ ratios, setRatios, stationFuel, setStationFuel }: {
       </ul>
       <h3>Brandstof per station</h3>
       <ul className="rows">
-        {Object.entries(fuelData.stations as Record<string, string[]>).map(([st, opts]) => (
+        {Object.entries(FUEL_STATIONS).map(([st, opts]) => (
           <li key={st}>
             <div className="grow">{stationName(st)}</div>
             <select value={stationFuel[st] ?? opts[0]} onChange={(e) => setStationFuel({ ...stationFuel, [st]: e.target.value })}>
@@ -237,9 +309,7 @@ function FuelSettings({ ratios, setRatios, stationFuel, setStationFuel }: {
           </li>
         ))}
       </ul>
-      <button className="wide" onClick={() => { setRatios(Object.fromEntries(fuelData.fuels.map((f) => [f.id, f.craftsPerUnit]))); setStationFuel({}); }}>
-        Standaardwaarden
-      </button>
+      <button className="wide" onClick={() => { setRatios(DEFAULT_RATIOS); setStationFuel({}); }}>Brandstof standaard</button>
     </>
   );
 }
